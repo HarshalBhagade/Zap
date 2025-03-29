@@ -58,7 +58,7 @@ export default function Home() {
   const [transferSpeed, setTransferSpeed] = useState<{ [key: string]: string }>(
     {},
   );
-  const [showQrCode, setShowQrCode] = useState(false);
+  const [showQrCode, setShowQrCode] = useState(true);
   const [showCopied, setShowCopied] = useState(false);
   const [transferLogs, setTransferLogs] = useState<TransferLog[]>([]);
   const [showLogs, setShowLogs] = useState(false);
@@ -548,138 +548,147 @@ export default function Home() {
   };
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 p-4 md:p-6">
-      {/* Connection Status - Responsive layout */}
-      <div className="mb-6 rounded-lg border border-zinc-200 p-4 md:mb-8 dark:border-zinc-800">
-        <div className="flex flex-col items-start justify-between p-2 sm:flex-row sm:items-center">
-          <div className="mb-2 flex items-center space-x-2 sm:mb-0">
-            {isConnected ?
-              <Wifi className="h-5 w-5 text-green-600 dark:text-green-500" />
-            : <WifiOff className="h-5 w-5 text-red-600 dark:text-red-500" />}
-            <span className="font-medium">
-              Status: {isConnected ? "Connected" : "Disconnected"}
-            </span>
-          </div>
-          <div className="flex w-full items-center space-x-2 sm:w-auto">
-            <button
-              onClick={() => setShowLogs(true)}
-              className="flex w-full items-center justify-center gap-1 rounded-md bg-zinc-100 px-3 py-1 text-sm hover:bg-zinc-200 sm:w-auto dark:bg-zinc-800 dark:hover:bg-zinc-700"
-            >
-              <span>View History</span>
-              {transferLogs.length > 0 && (
-                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-zinc-200 text-xs font-medium dark:bg-zinc-700">
-                  {transferLogs.length}
+    <main className="mx-auto w-full max-w-7xl flex-1 p-4 md:p-6">
+      {/* Top Section - Two Column Layout */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[350px_1fr] lg:gap-6">
+        {/* Left Column - Connection Status */}
+        <div className="">
+          <div className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+            <div className="flex flex-col items-start justify-between p-3 sm:flex-row sm:items-center">
+              <div className="mb-2 flex items-center space-x-2 sm:mb-0">
+                {isConnected ?
+                  <Wifi className="h-5 w-5 text-green-600 dark:text-green-500" />
+                : <WifiOff className="h-5 w-5 text-red-600 dark:text-red-500" />
+                }
+                <span className="font-medium">
+                  Status: {isConnected ? "Connected" : "Disconnected"}
                 </span>
-              )}
-            </button>
-            <RefreshCw
-              className="h-5 w-5 cursor-pointer hover:text-zinc-600 dark:hover:text-zinc-300"
-              onClick={() => window.location.reload()}
-            />
-          </div>
-        </div>
-
-        {isConnected && (
-          <div className="mb-4 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-              <h3 className="mb-2 text-sm font-medium sm:mb-0">
-                Device Connection
-              </h3>
-              <button
-                onClick={() => setShowQrCode(!showQrCode)}
-                className="flex w-full items-center justify-center gap-1 rounded-md bg-zinc-100 px-3 py-1 text-sm hover:bg-zinc-200 sm:w-auto dark:bg-zinc-800 dark:hover:bg-zinc-700"
-              >
-                <QrCodeIcon className="h-4 w-4" />
-                {showQrCode ? "Hide QR Code" : "Show QR Code"}
-              </button>
+              </div>
+              <div className="flex w-full items-center space-x-2 sm:w-auto">
+                <button
+                  onClick={() => setShowLogs(true)}
+                  className="flex w-full items-center justify-center gap-1 rounded-md bg-zinc-100 px-3 py-1 text-sm hover:bg-zinc-200 sm:w-auto dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                >
+                  <span>History</span>
+                  {transferLogs.length > 0 && (
+                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-zinc-200 text-xs font-medium dark:bg-zinc-700">
+                      {transferLogs.length}
+                    </span>
+                  )}
+                </button>
+                <RefreshCw
+                  className="h-5 w-5 cursor-pointer hover:text-zinc-600 dark:hover:text-zinc-300"
+                  onClick={() => window.location.reload()}
+                />
+              </div>
             </div>
 
-            {showQrCode && (
-              <div className="mt-4 flex flex-col items-center">
-                <div className="mb-4 rounded-lg border-4 border-white bg-white p-2 dark:border-zinc-900 dark:bg-zinc-900">
-                  <QRCodeSVG
-                    value={`${connectURL}/home?connect=${userid}`}
-                    size={window.innerWidth < 400 ? 150 : 200}
-                    level="H"
-                    includeMargin={false}
-                    fgColor="currentColor"
-                    className="text-zinc-900 dark:text-zinc-100"
-                  />
+            {isConnected && (
+              <div className="mb-4 h-full rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                  <h3 className="mb-2 text-sm font-medium sm:mb-0">
+                    Device Connection
+                  </h3>
+                  <button
+                    onClick={() => setShowQrCode(!showQrCode)}
+                    className="flex w-full items-center justify-center gap-1 rounded-md bg-zinc-100 px-3 py-1 text-sm hover:bg-zinc-200 sm:w-auto dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                  >
+                    <QrCodeIcon className="h-4 w-4" />
+                    {showQrCode ? "Hide QR Code" : "Show QR Code"}
+                  </button>
                 </div>
-                <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
-                  Scan this code to connect to this device
-                  <br />
-                  <span className="mt-1 inline-block text-xs opacity-75">
-                    or share this ID: {userid.slice(0, 12)}...
+
+                {showQrCode && (
+                  <div className="mt-6 flex flex-col items-center">
+                    <div className="mb-4 rounded-lg border-4 border-white bg-white p-2 dark:border-zinc-900 dark:bg-zinc-900">
+                      <QRCodeSVG
+                        value={`${connectURL}/home?connect=${userid}`}
+                        size={window.innerWidth < 400 ? 150 : 200}
+                        level="H"
+                        includeMargin={false}
+                        fgColor="currentColor"
+                        className="text-zinc-900 dark:text-zinc-100"
+                      />
+                    </div>
+                    <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
+                      Scan this code to connect to this device
+                      <br />
+                      <span className="mt-1 inline-block text-xs opacity-75">
+                        or share this ID: {userid.slice(0, 12)}...
+                      </span>
+                    </p>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(userid);
+                        setShowCopied(true);
+                        setTimeout(() => setShowCopied(false), 2000);
+                      }}
+                      className="mt-2 flex items-center gap-1 text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                    >
+                      <Copy className="h-3 w-3" />
+                      {showCopied ? "Copied!" : "Copy ID"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {userid && (
+              <div className="mt-7 flex items-center justify-between rounded bg-zinc-100 p-3 dark:bg-zinc-800">
+                <div className="flex-1 truncate">
+                  <span className="block text-sm text-zinc-500 dark:text-zinc-400">
+                    Your ID:
                   </span>
-                </p>
+                  <span className="font-mono text-sm">
+                    {userid.slice(0, 12)}...
+                  </span>
+                </div>
                 <button
                   onClick={() => {
-                    navigator.clipboard.writeText(userid);
+                    copyToClipboard(userid);
                     setShowCopied(true);
                     setTimeout(() => setShowCopied(false), 2000);
                   }}
-                  className="mt-2 flex items-center gap-1 text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  className="ml-2 rounded-full p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                  aria-label="Copy ID"
                 >
-                  <Copy className="h-3 w-3" />
-                  {showCopied ? "Copied!" : "Copy ID"}
+                  <Copy className="h-4 w-4" />
                 </button>
               </div>
             )}
           </div>
-        )}
+        </div>
 
-        {userid && (
-          <div className="mt-4 flex items-center justify-between rounded bg-zinc-100 p-3 dark:bg-zinc-800">
-            <div className="flex-1 truncate">
-              <span className="block text-sm text-zinc-500 dark:text-zinc-400">
-                Your ID:
-              </span>
-              <span className="font-mono text-sm">
-                {userid.slice(0, 12)}...
-              </span>
-            </div>
-            <button
-              onClick={() => {
-                copyToClipboard(userid);
-                setShowCopied(true);
-                setTimeout(() => setShowCopied(false), 2000);
-              }}
-              className="ml-2 rounded-full p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700"
-              aria-label="Copy ID"
-            >
-              <Copy className="h-4 w-4" />
-            </button>
+        {/* Right Column - Device Radar and Send Files */}
+        <div className="grid">
+          {/* Device Radar */}
+          <div className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+            <DeviceRadar
+              devices={connectedUsers
+                .filter((user) => user.id !== userid)
+                .map((user) => ({
+                  id: user.id,
+                  name: user.id.slice(0, 8) + "...",
+                  type: user.isMobile ? "phone" : "desktop",
+                  avatar: "/placeholder.svg?height=40&width=40",
+                  online: true,
+                  isSuggested:
+                    localStorage.getItem(
+                      JSON.stringify({
+                        type: "knownRecipient",
+                        recipientId: user.id,
+                      }),
+                    ) === "true",
+                }))}
+              selectedIds={recipientIds}
+              onDeviceClick={(device) => toggleRecipient(device.id)}
+            />
           </div>
-        )}
-      </div>
 
-      {/* Device Radar - Responsive sizing */}
-      <div className="mb-6 rounded-lg border border-zinc-200 p-4 md:mb-8 md:p-6 dark:border-zinc-800">
-        <DeviceRadar
-          devices={connectedUsers
-            .filter((user) => user.id !== userid)
-            .map((user) => ({
-              id: user.id,
-              name: user.id.slice(0, 8) + "...",
-              type: user.isMobile ? "phone" : "desktop",
-              avatar: "/placeholder.svg?height=40&width=40",
-              online: true,
-              isSuggested:
-                localStorage.getItem(
-                  JSON.stringify({
-                    type: "knownRecipient",
-                    recipientId: user.id,
-                  }),
-                ) === "true",
-            }))}
-          selectedIds={recipientIds}
-          onDeviceClick={(device) => toggleRecipient(device.id)}
-        />
+          {/* Send Files */}
+        </div>
       </div>
-
-      {/* Send Files Section - Responsive grid */}
-      <div className="mb-6 rounded-lg border border-zinc-200 p-4 md:mb-8 md:p-6 dark:border-zinc-800">
+      <div className="mt-6 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
         <h2 className="mb-4 text-lg font-semibold md:text-xl">
           Send Files or Folders
         </h2>
@@ -853,10 +862,9 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      {/* Received Files Section - Responsive layout */}
+      {/* Received Files Section - Below both columns */}
       {receivedFiles.length > 0 && (
-        <div className="rounded-lg border border-zinc-200 p-4 md:p-6 dark:border-zinc-800">
+        <div className="mt-6 rounded-lg border border-zinc-200 p-4 md:p-6 dark:border-zinc-800">
           <div className="mb-4 flex flex-col items-start justify-between sm:flex-row sm:items-center">
             <h2 className="text-lg font-semibold md:text-xl">Received Files</h2>
             <div className="mt-2 flex items-center space-x-2 sm:mt-0">
@@ -922,14 +930,14 @@ export default function Home() {
                             key={index}
                             className="flex items-center justify-between border-b py-2 last:border-b-0"
                           >
-                            <div className="flex max-w-[70%] items-center">
-                              <FileIcon className="mr-2 h-4 w-4 text-zinc-600 dark:text-zinc-300" />
+                            <div className="flex items-center overflow-hidden">
+                              <FileIcon className="mr-2 h-4 w-4 flex-shrink-0 text-zinc-600 dark:text-zinc-300" />
                               <span className="truncate">{file.name}</span>
                             </div>
                             <a
                               href={file.file}
                               download={file.name}
-                              className="text-sm whitespace-nowrap text-blue-500 hover:text-blue-700 dark:hover:text-blue-400"
+                              className="flex-shrink-0 text-sm text-blue-500 hover:text-blue-700 dark:hover:text-blue-400"
                             >
                               Download
                             </a>
@@ -939,43 +947,43 @@ export default function Home() {
                     </div>
                   ))}
 
-                  {/* Display root files */}
-                  {rootFiles.map((file, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col items-start rounded-md bg-zinc-100 p-4 sm:flex-row sm:items-center dark:bg-zinc-800"
-                    >
-                      <div className="mb-2 flex items-center sm:mb-0">
-                        <FileIcon className="mr-3 h-8 w-8 text-zinc-600 dark:text-zinc-300" />
-                        <div className="min-w-0">
-                          <p className="max-w-[200px] truncate font-medium sm:max-w-none">
-                            {file.name}
-                          </p>
-                          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                            {formatFileSize(file.size)} •{" "}
-                            {file.receivedAt.toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </p>
-                        </div>
-                      </div>
-                      <a
-                        href={file.file}
-                        download={file.name}
-                        className="mt-2 ml-auto inline-flex items-center rounded-md bg-zinc-900 px-3 py-1.5 text-white transition-colors hover:bg-zinc-800 sm:mt-0 sm:ml-4 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
-                      >
-                        <ArrowDown className="mr-1 h-4 w-4" />
-                        Download
-                      </a>
+              {/* Display root files */}
+              {rootFiles.map((file, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col rounded-md items-center bg-zinc-100 p-4 sm:flex-row dark:bg-zinc-800"
+                >
+                  <div className="mb-2 flex grow items-center sm:mb-0">
+                    <FileIcon className="mr-3 h-8 w-8 text-zinc-600 dark:text-zinc-300" />
+                    <div className="min-w-0">
+                      <p className="max-w-[200px] truncate font-medium sm:max-w-none">
+                        {file.name}
+                      </p>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                        {formatFileSize(file.size)} •{" "}
+                        {file.receivedAt.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
                     </div>
-                  ))}
-                </>
-              );
-            })()}
-          </div>
-        </div>
-      )}
+                  </div>
+                  <a
+                    href={file.file}
+                    download={file.name}
+                    className="mt-2 ml-auto inline-flex items-center rounded-md bg-zinc-900 px-3 py-1.5 text-white transition-colors hover:bg-zinc-800 sm:mt-0 sm:ml-4 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+                  >
+                    <ArrowDown className="mr-1 h-4 w-4" />
+                    Download
+                  </a>
+                </div>
+              ))}
+            </>
+          );
+        })()}
+      </div>
+    </div>
+  )}
 
       {/* Transfer Log Panel */}
       {showLogs && (
